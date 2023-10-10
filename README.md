@@ -12,64 +12,52 @@ Now, brace yourselves as we ascend the tallest structure in Kafka City: The Gran
 
 ---
 
-## **The Vision: Kafka City's Grand Weather Tower**
 
-Imagine a towering beacon of information, perched atop Kafka City's skyline. A luminescent jewel that glimmers in the night, broadcasting weather updates and more to every corner of the city. This isn't just a monument of grandeur but a testament to the revolutionary power of Kafka producers and consumers. Dive into the Grand Weather Tower's blueprints with us, as we unravel how to construct real-time data streaming systems that can revolutionize applications — from fraud detection to customer analytics and even disaster response. Ready to be blown away?
+Welcome to the Spring Boot Kafka Weather App! This application showcases the power of Kafka in a real-time data streaming system. The application is designed as a part of the Kafka City trilogy, and this repository holds the implementation of Kafka City's Grand Weather Tower.
 
-Perched atop Kafka City's skyline, the Grand Weather Tower stands as a beacon of information. It's more than just a structure; it's the embodiment of Kafka's prowess. From this tower, weather updates are broadcasted, echoing through the city's alleyways, reaching every nook and cranny.
+## Prerequisites
 
----
+1. Java 11 or higher
+2. Docker and Docker Compose (if you wish to run the app with Docker)
 
-## **Laying the Foundation: The Weather Producer**
+## Local Setup Instructions
 
-Our tower's foundation is the **Weather Producer**, a complex array of instruments and gadgets that detect even the slightest change in the atmosphere. Let's delve into the blueprint:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/neerazz/spring-boot-kafka-weather-app.git
+   cd spring-boot-kafka-weather-app
+   ```
 
-```java
-@RestController
-public class WeatherProducerController {
+2. Build the project using Gradle:
+   ```bash
+   ./gradlew clean build
+   ```
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+3. Run the application:
+   ```bash
+   ./gradlew bootRun
+   ```
 
-    @PostMapping("/broadcastWeather")
-    public String broadcastWeather(@RequestBody String weatherUpdate) {
-        kafkaTemplate.send("WeatherUpdateTopic", weatherUpdate);
-        return "Update sent from the tower!";
-    }
-}
+## Docker Setup Instructions
 
-```
+1. Ensure you've built the project using Gradle as mentioned in the local setup.
 
-With this foundation, our tower is ready to sense and broadcast. But who listens to these broadcasts?
+2. Build the Docker image:
+   ```bash
+   docker build -t spring-boot-kafka-weather-app .
+   ```
 
----
+3. Run the application using Docker Compose (ensure you have a `docker-compose.yml` file):
+   ```bash
+   docker-compose up
+   ```
 
-## **The Antennas: Kafka City's Consumer Groups**
+## Features
 
-Rising from various parts of the city are antennas, designed to catch the tower's broadcasts. These are our **Consumer Groups**. Each antenna is tuned to the tower's frequency, eager to relay the updates to its locality.
+- Real-time weather data broadcasting using Kafka.
+- Storage of weather data in H2 database.
+- Real-time data streaming showcasing Kafka producers and consumers.
 
-```java
-@Service
-public class WeatherConsumer {
+## Contributing
 
-    @KafkaListener(topics = "WeatherUpdateTopic", groupId = "weatherAntennaGroup")
-    public void relayWeatherUpdate(String weatherUpdate) {
-        System.out.println("Weather update received: " + weatherUpdate);
-    }
-}
-
-```
-
-Each broadcast from the tower is caught by these antennas and shared, ensuring everyone in Kafka City is always informed.
-
----
-
-## **Epilogue: The Tower's Legacy**
-
-And there it stands, Kafka City's Grand Weather Tower, a testament to the seamless synergy of Producers and Consumers. A structure that not only defines the city's skyline but also epitomizes the essence of real-time data streaming.
-
-As we close this chapter of our Kafka City adventures, remember the marvels we've witnessed, the streets we've wandered, and the wonders of data streaming that make it all possible. Until our paths cross again in another data realm, keep exploring, keep innovating, and never cease to be amazed!"
-
----
-
-This narrative ties together the Kafka components with the grandeur and wonder of constructing a city's most iconic structure, making the technical content engaging and memorable.
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
