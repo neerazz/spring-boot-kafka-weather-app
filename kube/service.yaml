@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-kafka-city
+  labels:
+    app: spring-kafka-city
+spec:
+  selector:
+    app: spring-kafka-city
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-kafka-city
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-kafka-city
+  template:
+    metadata:
+      labels:
+        app: spring-kafka-city
+    spec:
+      containers:
+        - name: app
+          image: neerazz/spring-kafka-city
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENVIRONMENT
+              value: dev
+            - name: JDBC_URL
+              value: jdbc:postgresql://postgresdb:5432/test_db

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @AllArgsConstructor
 public class WeatherProducerController {
@@ -15,11 +17,11 @@ public class WeatherProducerController {
     private final WeatherProducerService weatherProducerService;
 
     @PostMapping("/broadcastWeather")
-    public String broadcastWeather(@RequestBody Weather weatherUpdate) {
+    public Map<String, String> broadcastWeather(@RequestBody Weather weatherUpdate) {
         if (weatherProducerService.processWeatherUpdate(weatherUpdate)) {
-            return "Update sent from the tower!";
+            return Map.of("success", "true", "message", "Weather update sent to tower!");
         } else {
-            return "There was an error sending to tower!";
+            return Map.of("success", "true", "message", "There was an error sending to tower!");
         }
     }
 }
