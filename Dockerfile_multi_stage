@@ -1,0 +1,33 @@
+# Stage 1: Build the application
+FROM eclipse-temurin:17-jdk-alpine as builder
+
+# Set the working directory in the Docker image
+WORKDIR /app
+
+# Copy the Gradle configuration files and wrapper
+COPY gradlew build.gradle settings.gradle ./
+COPY gradle gradle
+
+# Copy the source code
+COPY src src
+
+# Grant execution permissions to the Gradle wrapper
+RUN chmod +x ./gradlew
+
+# Debug: List files to verify
+RUN echo "$(ls -l)"
+
+# Build the application
+RUN ./gradlew build -x test
+
+# Stage 2: Run the application
+FROM eclipse-temurin:17-jre-alpine
+
+# Set the working directory in the Docker image
+WORKDIR /app
+
+# Copy the built JAR from the builder stage
+COPY --from=builder /app/build/libs/spring-kafka-city.jar /app/spring-kafka-city.jar
+
+# Set the command to run your application using the java command
+CMD ["java", "-jar", "/app/spring-kafka-city.jar"]
