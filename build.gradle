@@ -44,8 +44,13 @@ dependencies {
 	testImplementation 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
-
+	implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
 	implementation 'org.modelmapper:modelmapper:3.2.0'
+
+//	Batch Process
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.batch:spring-batch-test'
 
 }
 

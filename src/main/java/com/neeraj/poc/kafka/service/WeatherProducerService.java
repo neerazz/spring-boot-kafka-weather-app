@@ -3,8 +3,9 @@ package com.neeraj.poc.kafka.service;
 import com.neeraj.poc.kafka.domain.WeatherConverter;
 import com.neeraj.poc.kafka.model.KafkaProperties;
 import com.neeraj.poc.kafka.model.entity.WeatherEntity;
-import com.neeraj.poc.kafka.model.pojo.Weather;
+import com.neeraj.poc.kafka.model.pojo.WeatherDTO;
 import com.neeraj.poc.kafka.repository.WeatherRepository;
+import com.neeraj.poc.kafka.repository.WeatherRepository_Cass;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,33 +22,61 @@ import java.util.List;
 public class WeatherProducerService {
 
     private final WeatherRepository weatherRepository;
-    private final KafkaTemplate<String, Weather> kafkaTemplate;
+    private final WeatherRepository_Cass weatherRepositoryCass;
+    private final KafkaTemplate<String, WeatherDTO> kafkaTemplate;
     private final KafkaProperties kafkaProperties;
 
-    public boolean processWeatherUpdate(Weather weatherUpdate) {
+    public boolean processWeatherUpdate(WeatherDTO weatherDTOUpdate) {
         try {
-            WeatherEntity weatherEntity = WeatherConverter.getWeatherEntity(weatherUpdate);
+            WeatherEntity weatherEntity = WeatherConverter.getWeatherEntityFromDTO(weatherDTOUpdate);
             weatherRepository.save(weatherEntity);
             return true;
         } catch (Exception exception) {
-            log.error("There was an Error Inserting the Weather to DB.");
+            log.error("There was an Error Inserting the WeatherDTO to DB.");
         } finally {
-            log.info("Sending Weather Details to Kafka Tower.");
-            kafkaTemplate.send(kafkaProperties.getWeatherTopic(), weatherUpdate);
+            log.info("Sending WeatherDTO Details to Kafka Tower.");
+            kafkaTemplate.send(kafkaProperties.getWeatherTopic(), weatherDTOUpdate);
         }
         return false;
     }
 
-    public Page<Weather> getWeather(Integer limit, Integer pageNumber, String city) {
+    public Page<WeatherDTO> getWeather(Integer limit, Integer pageNumber, String city) {
         try {
             PageRequest pageRequest = PageRequest.of(pageNumber, limit);
             var result = weatherRepository.findByCityContains(pageRequest, city);
-            List<Weather> convertedPojo = WeatherConverter.getWeather(result.getContent());
+            List<WeatherDTO> convertedPojo = WeatherConverter.getWeatherDTO(result.getContent());
             return new PageImpl<>(convertedPojo, pageRequest, result.getTotalElements());
         } catch (Exception exception) {
             log.error("There was an Error while getting the weather from Database.");
             exception.printStackTrace();
             throw new RuntimeException("There was an Error While getting the weather from Database.");
         }
+    }
+
+    public Page<WeatherDTO> getWeatherV2(Integer limit, Integer pageNumber, String city) {
+        try {
+            PageRequest pageRequest = PageRequest.of(pageNumber, limit);
+            var result = weatherRepositoryCass.findByCityContains(pageRequest, city);
+            List<WeatherDTO> convertedPojo = WeatherConverter.getWeatherDTOFromCassEntity(result.getContent());
+            return new PageImpl<>(convertedPojo, pageRequest, result.getTotalElements());
+        } catch (Exception exception) {
+            log.error("There was an Error while getting the weather from Database.");
+            exception.printStackTrace();
+            throw new RuntimeException("There was an Error While getting the weather from Database.");
+        }
+    }
+
+    public boolean processWeatherUpdateV2(WeatherDTO weatherDTO) {
+        try {
+            var weatherEntity = WeatherConverter.getWeatherCassEntityFromDTO(weatherDTO);
+            weatherRepositoryCass.save(weatherEntity);
+            return true;
+        } catch (Exception exception) {
+            log.error("There was an Error Inserting the WeatherDTO to DB.");
+        } finally {
+            log.info("Sending WeatherDTO Details to Kafka Tower.");
+            kafkaTemplate.send(kafkaProperties.getWeatherTopic(), weatherDTO);
+        }
+        return false;
     }
 }

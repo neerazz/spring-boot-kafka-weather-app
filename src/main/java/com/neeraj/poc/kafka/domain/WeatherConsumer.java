@@ -10,6 +10,6 @@ public class WeatherConsumer {
 
     @KafkaListener(topics = "${kafka.weatherConsumer}", groupId = "${kafka.weatherConsumerGroupId}")
     public void relayWeatherUpdate(String weatherUpdate) {
-        log.info("Weather update received: {}", weatherUpdate);
+        log.info("WeatherDTO update received: {}", weatherUpdate);
     }
 }

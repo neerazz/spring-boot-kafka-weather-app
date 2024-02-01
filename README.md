@@ -24,8 +24,8 @@ Welcome to the Spring Boot Kafka Weather App! This application showcases the pow
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/neerazz/spring-boot-kafka-weather-app.git
-   cd spring-boot-kafka-weather-app
+   git clone https://github.com/neerazz/spring-boot-kafka-weatherDTO-app.git
+   cd spring-boot-kafka-weatherDTO-app
    ```
 
 2. Build the project using Gradle:
@@ -44,7 +44,7 @@ Welcome to the Spring Boot Kafka Weather App! This application showcases the pow
 
 2. Build the Docker image:
    ```bash
-   docker build -t spring-boot-kafka-weather-app .
+   docker build -t spring-boot-kafka-weatherDTO-app .
    ```
 
 3. Run the application using Docker Compose (ensure you have a `docker-compose.yml` file):
@@ -54,8 +54,8 @@ Welcome to the Spring Boot Kafka Weather App! This application showcases the pow
 
 ## Features
 
-- Real-time weather data broadcasting using Kafka.
-- Storage of weather data in H2 database.
+- Real-time weatherDTO data broadcasting using Kafka.
+- Storage of weatherDTO data in H2 database.
 - Real-time data streaming showcasing Kafka producers and consumers.
 
   ## Set up Kafka locally
@@ -129,7 +129,7 @@ Welcome to the Spring Boot Kafka Weather App! This application showcases the pow
 ## API Endpoint
 
 #### Introduction
-This endpoint records weather data at a specific location and time.
+This endpoint records weatherDTO data at a specific location and time.
 
 #### Endpoint
 - **URL**: `http:localhost:8080`

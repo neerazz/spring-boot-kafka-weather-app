@@ -19,6 +19,7 @@ services:
     depends_on:
       - control-center
       - mysql
+      - cassandra
 
   mysql:
     image: mysql
@@ -33,6 +34,23 @@ services:
       - "3306:3306"
     volumes:
       - ./src/main/resources/mysql_init.sql:/docker-entrypoint-initdb.d/init.sql # Initialization script
+    depends_on:
+      - cassandra
+      - control-center
+
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=myCluster
+      - CASSANDRA_DC=myDC
+      - CASSANDRA_RACK=myRack
+      - CASSANDRA_USER=cassandra_user
+      - CASSANDRA_PASSWORD=cassandra_password
+    volumes:
+      - cassandra_data:/var/lib/cassandra
 
 
   zookeeper:
@@ -99,3 +117,6 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+
+volumes:
+  cassandra_data:

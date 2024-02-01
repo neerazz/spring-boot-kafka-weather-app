@@ -1,10 +1,9 @@
 package com.neeraj.poc.kafka.config;
 
 import com.neeraj.poc.kafka.model.KafkaProperties;
-import com.neeraj.poc.kafka.model.pojo.Weather;
+import com.neeraj.poc.kafka.model.pojo.WeatherDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -25,7 +24,7 @@ public class KafkaProducerConfig {
     private KafkaProperties kafkaProperties;
 
     @Bean
-    public ProducerFactory<String, Weather> producerFactory() {
+    public ProducerFactory<String, WeatherDTO> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServer());
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -34,7 +33,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Weather> kafkaTemplate() {
+    public KafkaTemplate<String, WeatherDTO> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
