@@ -6,6 +6,8 @@ import com.neeraj.poc.kafka.model.pojo.Weather;
 import com.neeraj.poc.kafka.repository.WeatherRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +37,14 @@ public class WeatherProducerService {
             kafkaTemplate.send(kafkaProperties.getWeatherTopic(), weatherUpdate);
         }
         return false;
+    }
+
+    public Page<WeatherEntity> getWeather(Integer limit, Integer offSet) {
+        try {
+            return weatherRepository.findAll(Pageable.ofSize(limit));
+        } catch (Exception exception) {
+            log.error("There was an Error while getting the weather from Database.");
+            throw new RuntimeException("There was an Error While getting the weather from Database.");
+        }
     }
 }
