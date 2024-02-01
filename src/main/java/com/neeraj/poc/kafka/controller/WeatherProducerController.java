@@ -9,16 +9,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@RestController("/weather")
+@RestController
+@RequestMapping("/weather")
 @AllArgsConstructor
 public class WeatherProducerController {
 
     private final WeatherProducerService weatherProducerService;
 
-    @GetMapping("/weather")
-    public Page<WeatherEntity> getWeather(@RequestParam(name = "limit", required = false, defaultValue = "20") Integer limit,
-                                          @RequestParam(name = "offSet", required = false, defaultValue = "0") Integer offSet) {
-        return weatherProducerService.getWeather(limit, offSet);
+    @GetMapping
+    public Page<Weather> getWeather(@RequestParam(name = "limit", required = false, defaultValue = "20") Integer limit,
+                                    @RequestParam(name = "offSet", required = false, defaultValue = "0") Integer offSet, @RequestParam(name = "city", required = false) String city) {
+        return weatherProducerService.getWeather(limit, offSet, city);
     }
 
     @PostMapping("/broadcast")

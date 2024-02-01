@@ -1,5 +1,6 @@
 package com.neeraj.poc.kafka.service;
 
+import com.neeraj.poc.kafka.domain.WeatherConverter;
 import com.neeraj.poc.kafka.model.KafkaProperties;
 import com.neeraj.poc.kafka.model.entity.WeatherEntity;
 import com.neeraj.poc.kafka.model.pojo.Weather;
@@ -7,9 +8,12 @@ import com.neeraj.poc.kafka.repository.WeatherRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -22,12 +26,7 @@ public class WeatherProducerService {
 
     public boolean processWeatherUpdate(Weather weatherUpdate) {
         try {
-            var weatherEntity = WeatherEntity.builder()
-                    .longitude(weatherUpdate.getLongitude())
-                    .latitude(weatherUpdate.getLatitude())
-                    .timestamp(weatherUpdate.getTimestamp())
-                    .weatherInCelsius(weatherUpdate.getWeatherInCelsius())
-                    .build();
+            WeatherEntity weatherEntity = WeatherConverter.getWeatherEntity(weatherUpdate);
             weatherRepository.save(weatherEntity);
             return true;
         } catch (Exception exception) {
@@ -39,11 +38,15 @@ public class WeatherProducerService {
         return false;
     }
 
-    public Page<WeatherEntity> getWeather(Integer limit, Integer offSet) {
+    public Page<Weather> getWeather(Integer limit, Integer pageNumber, String city) {
         try {
-            return weatherRepository.findAll(Pageable.ofSize(limit));
+            PageRequest pageRequest = PageRequest.of(pageNumber, limit);
+            var result = weatherRepository.findByCityContains(pageRequest, city);
+            List<Weather> convertedPojo = WeatherConverter.getWeather(result.getContent());
+            return new PageImpl<>(convertedPojo, pageRequest, result.getTotalElements());
         } catch (Exception exception) {
             log.error("There was an Error while getting the weather from Database.");
+            exception.printStackTrace();
             throw new RuntimeException("There was an Error While getting the weather from Database.");
         }
     }

@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.4'
+	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.3'
 }
 
@@ -26,9 +26,13 @@ configurations {
 }
 
 dependencies {
+
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.kafka:spring-kafka'
-	compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
@@ -37,7 +41,12 @@ dependencies {
 
 //    Dependencies for Database
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'com.h2database:h2'
+	testImplementation 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+
+	implementation 'org.modelmapper:modelmapper:3.2.0'
+
 }
 
 tasks.named('test') {
