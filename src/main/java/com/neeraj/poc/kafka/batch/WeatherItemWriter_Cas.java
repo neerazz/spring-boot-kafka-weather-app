@@ -1,15 +1,12 @@
 package com.neeraj.poc.kafka.batch;
 
 import com.neeraj.poc.kafka.model.entity.WeatherEntity_Cass;
-import com.neeraj.poc.kafka.repository.WeatherRepository_Cass;
+import com.neeraj.poc.kafka.repository.cassandra.WeatherRepository_Cass;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
-
-import java.util.*;
-import java.io.*;
 
 @Slf4j
 @Component

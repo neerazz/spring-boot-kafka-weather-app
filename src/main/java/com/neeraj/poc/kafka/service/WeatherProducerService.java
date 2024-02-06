@@ -4,8 +4,8 @@ import com.neeraj.poc.kafka.domain.WeatherConverter;
 import com.neeraj.poc.kafka.model.KafkaProperties;
 import com.neeraj.poc.kafka.model.entity.WeatherEntity;
 import com.neeraj.poc.kafka.model.pojo.WeatherDTO;
-import com.neeraj.poc.kafka.repository.WeatherRepository;
-import com.neeraj.poc.kafka.repository.WeatherRepository_Cass;
+import com.neeraj.poc.kafka.repository.mysql.WeatherRepository;
+import com.neeraj.poc.kafka.repository.cassandra.WeatherRepository_Cass;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -58,7 +58,7 @@ public class WeatherProducerService {
             PageRequest pageRequest = PageRequest.of(pageNumber, limit);
             var result = weatherRepositoryCass.findByCityContains(pageRequest, city);
             List<WeatherDTO> convertedPojo = WeatherConverter.getWeatherDTOFromCassEntity(result.getContent());
-            return new PageImpl<>(convertedPojo, pageRequest, result.getTotalElements());
+            return new PageImpl<>(convertedPojo, pageRequest, result.getNumber());
         } catch (Exception exception) {
             log.error("There was an Error while getting the weather from Database.");
             exception.printStackTrace();

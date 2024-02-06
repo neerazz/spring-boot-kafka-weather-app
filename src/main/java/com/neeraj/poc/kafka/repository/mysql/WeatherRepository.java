@@ -1,4 +1,4 @@
-package com.neeraj.poc.kafka.repository;
+package com.neeraj.poc.kafka.repository.mysql;
 
 import com.neeraj.poc.kafka.model.entity.WeatherEntity;
 import org.springframework.data.domain.Page;
