@@ -17,8 +17,11 @@ public class WeatherProducerControllerV2 {
 
     @GetMapping
     public Page<WeatherDTO> getWeather(@RequestParam(name = "limit", required = false, defaultValue = "20") Integer limit,
-                                       @RequestParam(name = "offSet", required = false, defaultValue = "0") Integer offSet, @RequestParam(name = "city", required = false) String city) {
-        return weatherProducerService.getWeatherV2(limit, offSet, city);
+                                       @RequestParam(name = "offSet", required = false, defaultValue = "0") Integer offSet,
+                                       @RequestParam(name = "city", required = false, defaultValue = "") String city,
+                                       @RequestParam(name = "country", required = false, defaultValue = "") String country,
+                                       @RequestParam(name = "capital", required = false, defaultValue = "") String capital) {
+        return weatherProducerService.getWeatherV2(limit, offSet, city, country, capital);
     }
 
     @PostMapping("/broadcast")

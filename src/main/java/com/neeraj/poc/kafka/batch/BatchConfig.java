@@ -29,24 +29,6 @@ public class BatchConfig {
 
     public static final String CITIES_FILE_NAME = "worldcities.csv";
 
-    //    @Value("${spring.batch.jdbc.initialize-schema}")
-//    private final String initializeSchema;
-//
-//    @Bean
-//    public JobRepository jobRepository() {
-//        JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
-//        factory.setDataSource(dataSource);
-//        factory.setTransactionManager(transactionManager);
-//        factory.setIsolationLevelForCreate("SERIALIZABLE");
-//        factory.setTablePrefix("BATCH_");
-//        factory.setMaxVarCharLength(1000);
-//        factory.setIncrementerFactory(incrementerFactory());
-//        try {
-//            return factory.getObject();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     @Bean
     public DataFieldMaxValueIncrementerFactory incrementerFactory() {

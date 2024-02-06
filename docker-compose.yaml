@@ -39,7 +39,10 @@ services:
       - control-center
 
   cassandra:
-    image: cassandra:latest
+    build:
+      context: . # The directory containing your Dockerfile_Cassandra
+      dockerfile: Dockerfile_Cassandra # The name of your Dockerfile
+    image: cassandra
     container_name: cassandra
     ports:
       - "9042:9042"

@@ -11,16 +11,14 @@ import org.springframework.data.cassandra.core.convert.CassandraConverter;
 import org.springframework.data.cassandra.core.convert.MappingCassandraConverter;
 import org.springframework.data.cassandra.core.mapping.CassandraMappingContext;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
+import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Slf4j
 @Configuration
-@EnableCassandraRepositories(basePackages = "com.neeraj.poc.kafka.repository.cassandra")
+@EnableCassandraRepositories(basePackages = "com.neeraj.poc.kafka.repository.cassandra",
+        queryLookupStrategy = QueryLookupStrategy.Key.CREATE_IF_NOT_FOUND)
 @EnableTransactionManagement
-//@EnableJpaRepositories(
-//        entityManagerFactoryRef = "cassandraEntityManagerFactory",
-//        basePackages = { "com.neeraj.poc.kafka.repository.cassandra" }
-//)
 public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Value("${spring.cassandra.keyspace-name}")
@@ -98,6 +96,8 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 
         // Set the manual converter
         session.setConverter(cassandraConverter());
+
+        session.setSchemaAction(getSchemaAction());
 
         return session;
     }

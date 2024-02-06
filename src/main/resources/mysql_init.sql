@@ -1,6 +1,26 @@
--- Create the Table
+-- Drop Tables if Exists
 
-DROP TABLE IF EXISTS WEATHER_ENTITY;
+drop table if exists BATCH_JOB_EXECUTION_CONTEXT cascade;
+
+drop table if exists BATCH_JOB_EXECUTION_PARAMS cascade;
+
+drop table if exists BATCH_JOB_EXECUTION_SEQ cascade;
+
+drop table if exists BATCH_JOB_SEQ cascade;
+
+drop table if exists BATCH_STEP_EXECUTION_CONTEXT cascade;
+
+drop table if exists BATCH_STEP_EXECUTION cascade;
+
+drop table if exists BATCH_JOB_EXECUTION cascade;
+
+drop table if exists BATCH_JOB_INSTANCE cascade;
+
+drop table if exists BATCH_STEP_EXECUTION_SEQ cascade;
+
+drop table if exists weather_entity cascade;
+
+-- Create the Table
 
 CREATE TABLE `weather_entity`
 (

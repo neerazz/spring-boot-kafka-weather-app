@@ -1,0 +1,11 @@
+# Dockerfile_Cassandra
+FROM cassandra:latest
+
+# Copy the initialization script into the image
+COPY /src/main/resources/cassandra-init.sh /cassandra-init.sh
+
+# Make the initialization script executable
+RUN chmod +x /cassandra-init.sh
+
+# Run the initialization script before starting Cassandra
+CMD ["/bin/bash", "-c", "/cassandra-init.sh && /docker-entrypoint.sh cassandra -f"]

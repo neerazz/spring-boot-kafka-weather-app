@@ -1,11 +1,12 @@
 package com.neeraj.poc.kafka.service;
 
-import com.neeraj.poc.kafka.domain.WeatherConverter;
+import com.neeraj.poc.kafka.converter.WeatherConverter;
 import com.neeraj.poc.kafka.model.KafkaProperties;
 import com.neeraj.poc.kafka.model.entity.WeatherEntity;
+import com.neeraj.poc.kafka.model.entity.WeatherEntity_Cass;
 import com.neeraj.poc.kafka.model.pojo.WeatherDTO;
-import com.neeraj.poc.kafka.repository.mysql.WeatherRepository;
 import com.neeraj.poc.kafka.repository.cassandra.WeatherRepository_Cass;
+import com.neeraj.poc.kafka.repository.mysql.WeatherRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -53,12 +55,23 @@ public class WeatherProducerService {
         }
     }
 
-    public Page<WeatherDTO> getWeatherV2(Integer limit, Integer pageNumber, String city) {
+    public Page<WeatherDTO> getWeatherV2(Integer limit, Integer pageNumber, String city, String country, String capital) {
         try {
             PageRequest pageRequest = PageRequest.of(pageNumber, limit);
-            var result = weatherRepositoryCass.findByCityContains(pageRequest, city);
-            List<WeatherDTO> convertedPojo = WeatherConverter.getWeatherDTOFromCassEntity(result.getContent());
-            return new PageImpl<>(convertedPojo, pageRequest, result.getNumber());
+            List<WeatherEntity_Cass> content = new ArrayList<>();
+            if (!city.isBlank() && !country.isBlank() && !capital.isBlank()) {
+                var result = weatherRepositoryCass.findByCityAndCountryAndCapital(pageRequest, city, country, capital);
+                content = result.getContent();
+            } else if (!city.isBlank() && !country.isBlank()) {
+                var result = weatherRepositoryCass.findByCityAndCountry(pageRequest, city, country);
+                content = result.getContent();
+            } else if (!city.isBlank()) {
+                var result = weatherRepositoryCass.findByCity(pageRequest, city);
+                log.info("Query To get by City : {}. Pagable object: {}", city, result.getPageable());
+                content = result.getContent();
+            }
+            List<WeatherDTO> convertedPojo = WeatherConverter.getWeatherDTOFromCassEntity(content);
+            return new PageImpl<>(convertedPojo, pageRequest, content.size());
         } catch (Exception exception) {
             log.error("There was an Error while getting the weather from Database.");
             exception.printStackTrace();

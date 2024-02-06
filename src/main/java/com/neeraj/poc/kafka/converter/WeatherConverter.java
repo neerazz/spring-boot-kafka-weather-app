@@ -1,4 +1,4 @@
-package com.neeraj.poc.kafka.domain;
+package com.neeraj.poc.kafka.converter;
 
 import com.neeraj.poc.kafka.model.entity.WeatherEntity;
 import com.neeraj.poc.kafka.model.entity.WeatherEntity_Cass;

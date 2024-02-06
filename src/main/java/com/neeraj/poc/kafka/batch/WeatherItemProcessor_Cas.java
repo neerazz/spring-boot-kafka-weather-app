@@ -1,6 +1,6 @@
 package com.neeraj.poc.kafka.batch;
 
-import com.neeraj.poc.kafka.domain.WeatherConverter;
+import com.neeraj.poc.kafka.converter.WeatherConverter;
 import com.neeraj.poc.kafka.model.entity.WeatherEntity_Cass;
 import com.neeraj.poc.kafka.model.pojo.CityDTO;
 import org.springframework.batch.item.ItemProcessor;
